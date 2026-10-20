@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Phishing Email Detection System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>🛡️ Phishing Email Detection System</h1>
+
+        <p class="subtitle">
+            Email Security Analysis Dashboard
+        </p>
+
+        <form method="POST">
+
+            <label>Sender Email Address</label>
+
+            <input type="text"
+                   name="sender"
+                   placeholder="example@email.com"
+                   required>
+
+            <label>Email Subject</label>
+
+            <input type="text"
+                   name="subject"
+                   placeholder="Enter email subject"
+                   required>
+
+            <label>Email Body</label>
+
+            <textarea name="body"
+                      rows="8"
+                      placeholder="Paste email content here..."
+                      required></textarea>
+
+            <button type="submit">
+                Analyze Email
+            </button>
+
+        </form>
+
+        {% if result %}
+
+        <div class="result">
+
+            <h2>Security Analysis Report</h2>
+
+            <h3>{{ result.result }}</h3>
+
+            <p>
+                <strong>Risk Level:</strong>
+                {{ result.risk_level }}
+            </p>
+
+            <p>
+                <strong>Risk Score:</strong>
+                {{ result.score }}
+            </p>
+
+            <h3>Detected Indicators</h3>
+
+            <ul>
+                {% for finding in result.findings %}
+
+                <li>{{ finding }}</li>
+
+                {% else %}
+
+                <li>No predefined indicators detected.</li>
+
+                {% endfor %}
+            </ul>
+
+            <h3>Security Recommendation</h3>
+
+            {% if result.risk_level == "HIGH RISK" %}
+
+            <p>
+                Warning! This email contains multiple
+                phishing indicators. Avoid opening
+                suspicious links or sharing credentials.
+            </p>
+
+            {% elif result.risk_level == "MEDIUM RISK" %}
+
+            <p>
+                This email requires further verification.
+                Check the sender and URLs carefully.
+            </p>
+
+            {% else %}
+
+            <p>
+                No strong indicators were detected.
+                However, this does not guarantee safety.
+            </p>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+</html>
